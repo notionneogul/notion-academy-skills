@@ -7,7 +7,7 @@
 저장소를 클론한 뒤 `notion-academy-skills` 폴더 안에서 실행한다.
 
 ```bash
-git clone <이 저장소 URL>
+git clone https://github.com/notionneogul/notion-academy-skills.git
 cd notion-academy-skills
 mkdir -p ~/.claude/skills
 cp -r skills/* ~/.claude/skills/
