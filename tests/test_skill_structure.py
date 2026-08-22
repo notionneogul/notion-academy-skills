@@ -3,7 +3,7 @@ import re
 import pytest
 import yaml
 
-from helpers import REPO, skill_dirs
+from helpers import REPO, WRITE_SKILLS, skill_dirs
 
 FRONTMATTER = re.compile(r"\A---\n(.*?)\n---\n", re.S)
 
@@ -46,3 +46,51 @@ def test_readme_lists_every_skill():
     readme = (REPO / "README.md").read_text(encoding="utf-8")
     missing = [d.name for d in skill_dirs() if d.name not in readme]
     assert not missing, f"README.md 에 언급되지 않은 스킬: {missing}"
+
+
+def test_readme_states_write_skills_need_approval():
+    text = (REPO / "README.md").read_text(encoding="utf-8")
+    assert "승인 없이" in text and "쓰지 않는다" in text, (
+        "README 가 승인 없이 쓰지 않는다는 것을 명시하지 않았다"
+    )
+
+
+def test_readme_separates_read_and_write_skills():
+    """'쓰기' 라는 낱말이 어딘가 있는지가 아니라, 두 표가 실제로 나뉘어 있는지를 본다."""
+    text = (REPO / "README.md").read_text(encoding="utf-8")
+    for heading in ["### 읽기 전용", "### 쓰기"]:
+        assert re.search(rf"^{re.escape(heading)}\s*$", text, re.M), (
+            f"README 에 「{heading}」 표 제목이 없다 — 두 분류가 표로 나뉘어 있어야 한다"
+        )
+    read_section = text.split("### 읽기 전용", 1)[1].split("### 쓰기", 1)[0]
+    write_section = text.split("### 쓰기", 1)[1]
+    for skill in ["academy-setup", "academy-insight", "academy-doctor"]:
+        assert skill in read_section, f"README 「읽기 전용」 표에 {skill} 이 없다"
+        assert f"| `{skill}` |" not in write_section, (
+            f"README 「쓰기」 표에 읽기 전용 스킬 {skill} 이 들어가 있다"
+        )
+    for skill in WRITE_SKILLS:
+        assert f"| `{skill}` |" in write_section, f"README 「쓰기」 표에 {skill} 이 없다"
+
+
+def test_readme_states_message_does_not_send():
+    """'발송' 이라는 낱말만 보면 '자동 발송합니다' 도 통과한다 — 부정문을 확인한다."""
+    text = (REPO / "README.md").read_text(encoding="utf-8")
+    assert "발송하지 않는다" in text, (
+        "README 가 '발송하지 않는다' 를 명시하지 않았다"
+    )
+    assert "자동 발송합니다" not in text and "자동으로 발송한다" not in text
+
+
+def test_install_matches_skill_folder_list():
+    """INSTALL 이 안내하는 폴더 수·목록이 실제 스킬 폴더와 일치해야 한다.
+
+    3단계에서 스킬이 4개에서 11개로 늘었을 때 INSTALL 만 4개로 남아 있었다.
+    """
+    text = (REPO / "INSTALL.md").read_text(encoding="utf-8")
+    names = [d.name for d in skill_dirs()]
+    missing = [n for n in names if n not in text]
+    assert not missing, f"INSTALL.md 에 언급되지 않은 스킬 폴더: {missing}"
+    assert f"총 {len(names)}개" in text, (
+        f"INSTALL.md 가 폴더 수를 '총 {len(names)}개' 로 적지 않았다 (현재 스킬 {len(names)}개)"
+    )

@@ -32,7 +32,15 @@ mkdir -p ~/.claude/skills
 cp -r skills/* ~/.claude/skills/
 ```
 
-스킬은 폴더째 `~/.claude/skills/` 아래로 복사된다. `academy-core`, `academy-setup`, `academy-insight`, `academy-doctor` 네 폴더가 그대로 들어가야 한다.
+스킬은 폴더째 `~/.claude/skills/` 아래로 복사된다. **`academy-core` 와 나머지 10개 스킬 폴더, 총 11개**가 그대로 들어가야 한다.
+
+| 구분 | 폴더 |
+|---|---|
+| 공유 규칙 (1) | `academy-core` |
+| 읽기 전용 (3) | `academy-setup` · `academy-insight` · `academy-doctor` |
+| 쓰기 (7) | `academy-attendance` · `academy-homework` · `academy-exam` · `academy-counsel` · `academy-enroll` · `academy-tuition` · `academy-message` |
+
+`ls ~/.claude/skills/ | grep academy | wc -l` 이 `11` 이면 맞다.
 
 **실패 증상:** 복사한 뒤에도 클로드가 스킬을 인식하지 못하면 `~/.claude/skills/academy-setup/SKILL.md` 처럼 경로가 정확히 맞는지 확인한다. 하위 폴더 하나를 더 만들어 그 안에 복사하는 실수가 흔하다.
 
@@ -64,6 +72,39 @@ cp -r skills/* ~/.claude/skills/
 이때 `~/.academy/config.json` 파일이 생기고, `databases` 키 아래에 데이터베이스 15개가 매핑되어 있다.
 
 **실패 증상:** "연결되지 않았습니다"가 반복되면 `~/.academy/config.json` 이 없거나 손상된 것이다. `TROUBLESHOOTING.md` 를 본다.
+
+## 첫 입력 해보기
+
+연결까지 끝났으면 쓰기 스킬을 한 번 써 본다. 출결 입력이 가장 간단하다.
+
+```
+고2 수학 전체 출석
+```
+
+날짜를 말하지 않았다면 클로드가 먼저 되묻는다.
+
+```
+어느 날짜인가요?
+```
+
+"8월 24일"이라고 답하면, 클로드는 곧바로 쓰지 않는다. **만들 행을 미리보기 표로 먼저 보여주고 승인을 묻는다.**
+
+```
+출석부에 4행을 만듭니다.
+
+| 학생 | 날짜 | 출결 | 클래스 |
+|---|---|---|---|
+| 김서준 | 8/24 | 출석 | 고2 수학 심화 A |
+| 박시우 | 8/24 | 출석 | 고2 수학 심화 A |
+| 이하윤 | 8/24 | 출석 | 고2 수학 심화 A |
+| 조민준 | 8/24 | 출석 | 고2 수학 심화 A |
+
+이대로 만들까요?
+```
+
+**"응", "그래", "써줘" 처럼 승인해야만 실제로 노션에 쓰인다.** 표만 보여주고 끝나거나 "아니"라고 답하면 아무것도 쓰이지 않는다.
+
+승인한 뒤에 잘못된 걸 알아챘으면 "방금 거 취소해줘"라고 말한다. 같은 세션 안에서 방금 만든 행을 기억하고 있다가 `🗃️ 샘플 보관` 페이지로 옮기거나(새로 만든 행) 원래 값으로 되돌린다(고친 행). 세션이 바뀌어 클로드가 기억하지 못하면 노션에서 직접 처리하거나 `academy-doctor` 로 그 행을 찾는다.
 
 ## 다음
 

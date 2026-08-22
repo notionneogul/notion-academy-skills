@@ -8,3 +8,14 @@ def skill_dirs() -> list[Path]:
     if not SKILLS.is_dir():
         return []
     return sorted(p for p in SKILLS.iterdir() if p.is_dir() and (p / "SKILL.md").exists())
+
+
+WRITE_SKILLS = [
+    "academy-attendance",
+    "academy-counsel",
+    "academy-enroll",
+    "academy-exam",
+    "academy-homework",
+    "academy-message",
+    "academy-tuition",
+]
