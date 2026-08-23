@@ -170,7 +170,8 @@ cp -r skills/* ~/.claude/skills/
 | 구분 | 폴더 |
 |---|---|
 | 공유 규칙 (1) | `academy-core` |
-| 읽기 전용 (3) | `academy-setup` · `academy-insight` · `academy-doctor` |
+| 읽기 전용 (2) | `academy-insight` · `academy-doctor` |
+| 연결·정리 (1) | `academy-setup` |
 | 쓰기 (7) | `academy-attendance` · `academy-homework` · `academy-exam` · `academy-counsel` · `academy-enroll` · `academy-tuition` · `academy-message` |
 
 각 폴더 안에는 `SKILL.md` 파일이 들어 있습니다. `academy-setup` 폴더를 열었을 때 `SKILL.md` 가 보이면 제대로 들어간 것입니다.
@@ -241,6 +242,8 @@ cp -r skills/* ~/.claude/skills/
 
 ## 다음
 
-연결이 끝나면 "오늘 뭐 해야 해?", "위험한 학생 있어?", "데이터 점검해줘" 를 바로 써 볼 수 있습니다.
+연결이 끝나면 템플릿에 들어 있는 제작자 샘플 데이터부터 치웁니다. "샘플 지워줘" 라고 말하면 무엇을 몇 행 치우는지 표로 보여주고 승인을 받은 뒤 `🗃️ 샘플 보관` 페이지로 옮깁니다. 지우는 것이 아니라 옮기는 것이라 "샘플 되돌려줘" 로 되돌릴 수 있습니다.
+
+그다음 "오늘 뭐 해야 해?", "위험한 학생 있어?", "데이터 점검해줘" 를 바로 써 볼 수 있습니다.
 
 막히는 곳이 있으면 `TROUBLESHOOTING.md` 의 「설치할 때」 절을 먼저 봅니다.

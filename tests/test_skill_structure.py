@@ -55,17 +55,35 @@ def test_readme_states_write_skills_need_approval():
     )
 
 
-def test_readme_separates_read_and_write_skills():
-    """'쓰기' 라는 낱말이 어딘가 있는지가 아니라, 두 표가 실제로 나뉘어 있는지를 본다."""
+def test_readme_separates_read_setup_and_write_skills():
+    """'쓰기' 라는 낱말이 어딘가 있는지가 아니라, 세 표가 실제로 나뉘어 있는지를 본다.
+
+    `academy-setup` 은 샘플 정리에서 **행을 옮긴다.** 값만 고치는 `academy-doctor` 와
+    성격이 달라 「읽기 전용」에 둘 수 없고, 행을 만들지 않으니 「쓰기」도 아니다.
+    """
     text = (REPO / "README.md").read_text(encoding="utf-8")
-    for heading in ["### 읽기 전용", "### 쓰기"]:
+    headings = ["### 읽기 전용", "### 연결·정리", "### 쓰기"]
+    for heading in headings:
         assert re.search(rf"^{re.escape(heading)}\s*$", text, re.M), (
-            f"README 에 「{heading}」 표 제목이 없다 — 두 분류가 표로 나뉘어 있어야 한다"
+            f"README 에 「{heading}」 표 제목이 없다 — 세 분류가 표로 나뉘어 있어야 한다"
         )
-    read_section = text.split("### 읽기 전용", 1)[1].split("### 쓰기", 1)[0]
+    positions = [text.index(h) for h in headings]
+    assert positions == sorted(positions), (
+        f"README 의 세 분류 순서가 읽기 전용 → 연결·정리 → 쓰기 가 아니다: {positions}"
+    )
+    read_section = text.split("### 읽기 전용", 1)[1].split("### 연결·정리", 1)[0]
+    setup_section = text.split("### 연결·정리", 1)[1].split("### 쓰기", 1)[0]
     write_section = text.split("### 쓰기", 1)[1]
-    for skill in ["academy-setup", "academy-insight", "academy-doctor"]:
-        assert skill in read_section, f"README 「읽기 전용」 표에 {skill} 이 없다"
+
+    assert "| `academy-setup` |" in setup_section, (
+        "README 「연결·정리」 표에 academy-setup 행이 없다"
+    )
+    for section, name in [(read_section, "읽기 전용"), (write_section, "쓰기")]:
+        assert "| `academy-setup` |" not in section, (
+            f"README 「{name}」 표에 academy-setup 이 들어가 있다 — 행을 옮기는 스킬이다"
+        )
+    for skill in ["academy-insight", "academy-doctor"]:
+        assert f"| `{skill}` |" in read_section, f"README 「읽기 전용」 표에 {skill} 이 없다"
         assert f"| `{skill}` |" not in write_section, (
             f"README 「쓰기」 표에 읽기 전용 스킬 {skill} 이 들어가 있다"
         )
