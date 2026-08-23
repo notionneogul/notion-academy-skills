@@ -98,9 +98,9 @@ Claude Code 를 아직 한 번도 실행하지 않았다면 이 폴더가 없을
 
 ### 경로 A — ZIP 내려받기 (터미널 없이)
 
-1. 브라우저에서 저장소를 엽니다: <https://github.com/notionneogul/notion-academy-skills>
+1. 브라우저에서 다음 주소를 엽니다: <https://github.com/notionneogul/notion-academy-skills>
 2. 초록색 `Code` 버튼을 누르고 `Download ZIP` 을 선택합니다.
-   `[스크린샷 자리: GitHub 저장소의 Code 버튼과 Download ZIP 메뉴]`
+   `[스크린샷 자리: 위 주소를 열었을 때 보이는 초록색 Code 버튼과 Download ZIP 메뉴]`
 3. 내려받은 ZIP 파일을 두 번 눌러 압축을 풉니다. 보통 `notion-academy-skills-main` 이라는 이름의 폴더가 생깁니다.
 4. 그 폴더를 열면 안에 `skills` 폴더가 있습니다. **`skills` 폴더를 열면 `academy-` 로 시작하는 폴더가 11개** 보입니다.
 5. 창을 하나 더 열어 위 표대로 `.claude` 폴더로 이동한 뒤, 그 안의 `skills` 폴더로 들어갑니다. (`skills` 폴더가 없으면 새로 만듭니다.)
@@ -148,7 +148,7 @@ Claude Code 를 아직 한 번도 실행하지 않았다면 이 폴더가 없을
 <details>
 <summary>터미널로 설치하기 (눌러서 펼치기)</summary>
 
-저장소를 클론한 뒤 `notion-academy-skills` 폴더 안에서 실행합니다. (`git` 이 설치되어 있어야 합니다.)
+아래 명령을 위에서부터 차례로 실행합니다. (`git` 이 설치되어 있어야 합니다. 없으면 경로 A 로 하십시오.)
 
 ```bash
 git clone https://github.com/notionneogul/notion-academy-skills.git
@@ -237,7 +237,7 @@ cp -r skills/* ~/.claude/skills/
 
 **"응", "그래", "써줘" 처럼 승인해야만 실제로 노션에 쓰입니다.** 표만 보여주고 끝나거나 "아니" 라고 답하면 아무것도 쓰이지 않습니다.
 
-승인한 뒤에 잘못된 걸 알아챘으면 "방금 거 취소해줘" 라고 말합니다. 같은 세션 안에서 방금 만든 행을 기억하고 있다가 `🗃️ 샘플 보관` 페이지로 옮기거나(새로 만든 행) 원래 값으로 되돌립니다(고친 행). 세션이 바뀌어 클로드가 기억하지 못하면 노션에서 직접 처리하거나 `academy-doctor` 로 그 행을 찾습니다.
+승인한 뒤에 잘못된 걸 알아챘으면 "방금 거 취소해줘" 라고 말합니다. 대화를 이어가는 동안에는 방금 만든 행을 기억하고 있다가 `🗃️ 샘플 보관` 페이지로 옮기거나(새로 만든 행) 원래 값으로 되돌립니다(고친 행). 세션이 바뀌어 클로드가 기억하지 못하면 노션에서 직접 처리하거나 `academy-doctor` 로 그 행을 찾습니다.
 
 ## 다음
 
