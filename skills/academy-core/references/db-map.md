@@ -27,12 +27,16 @@
     "클래스 공지사항": "collection://...",
     "문자 양식": "collection://...",
     "과제 M": "collection://..."
+  },
+  "message_formats": {
+    "주간 리포트": "원장이 준 문자 예시 원문…"
   }
 }
 ```
 
 - `template_version`: 템플릿 버전(문자열)
 - `root_page`: 루트 페이지 URL(문자열)
+- `message_formats`: **선택 키입니다.** `academy-message` 가 원장이 준 문자 예시를 이름 붙여 저장하는 곳입니다. 없어도 정상이고, **없다고 해서 미연결로 보지 않습니다** — 연결 판정은 `databases` 만 봅니다. 노션이 아니라 이 파일에 두는 이유는 `academy-message` 의 「양식 확인」 절에 있습니다.
 - `connected_at`: 연결 날짜(문자열, `YYYY-MM-DD` 형식)
 - `databases`: 한글 데이터베이스명을 `collection://<uuid>` 형식의 문자열에 매핑합니다(15개)
 
