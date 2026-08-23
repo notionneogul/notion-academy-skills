@@ -58,7 +58,7 @@
 | 학교 | `학교명`(title) · `선택`(select: 초등학교/중학교/고등학교) · `인원 수`(rollup) |
 | 클래스 공지사항 | `이름`(title) · `클래스`(relation→클래스) · `공유 링크`(formula) |
 | 문자 양식 | `이름`(title) · `문자 양식`(text) · `사용`(checkbox) · `학생`(relation→**학생 과목별 페이지**) |
-| 과제 M | 빈 이름의 title · `과제`(relation→과제) — 과제 일괄 처리용 보조 DB |
+| 과제 M | 빈 이름의 title · `과제`(relation→과제) — 마스터 테이블. 행 1건뿐이고 모든 과제 행이 이것을 가리킨다 |
 
 ### 이름이 오해를 부르는 relation
 

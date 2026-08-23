@@ -94,3 +94,39 @@ def test_install_matches_skill_folder_list():
     assert f"총 {len(names)}개" in text, (
         f"INSTALL.md 가 폴더 수를 '총 {len(names)}개' 로 적지 않았다 (현재 스킬 {len(names)}개)"
     )
+
+
+def test_install_offers_both_zip_and_terminal_paths():
+    """초보자용 ZIP 경로가 먼저 나오고, 터미널 경로는 접혀서 뒤에 있어야 한다."""
+    text = (REPO / "INSTALL.md").read_text(encoding="utf-8")
+    assert "Download ZIP" in text, "INSTALL 에 ZIP 내려받기 경로가 없다"
+    assert "git clone https://github.com/notionneogul/notion-academy-skills.git" in text, (
+        "INSTALL 에 터미널(git clone) 경로가 없다"
+    )
+    assert "<details>" in text, "INSTALL 의 터미널 경로가 <details> 로 접혀 있지 않다"
+    assert text.index("Download ZIP") < text.index("git clone"), (
+        "INSTALL 이 터미널 경로를 ZIP 경로보다 먼저 보여준다 — 기본은 ZIP 이다"
+    )
+
+
+def test_install_covers_mac_and_windows_paths():
+    """맥·윈도우 각각의 스킬 폴더 위치와 여는 법이 둘 다 있어야 한다."""
+    text = (REPO / "INSTALL.md").read_text(encoding="utf-8")
+    for anchor, why in [
+        ("~/.claude/skills", "맥 스킬 폴더 경로"),
+        (r"C:\Users\<사용자이름>\.claude\skills", "윈도우 스킬 폴더 경로"),
+        ("Command + Shift + G", "맥에서 숨김 폴더로 이동하는 법"),
+        (r"%USERPROFILE%\.claude", "윈도우 탐색기 주소창 경로"),
+    ]:
+        assert anchor in text, f"INSTALL 에 {why}({anchor}) 가 없다"
+
+
+def test_readme_install_shows_zip_before_terminal():
+    """README 의 설치 절도 INSTALL 과 같은 순서여야 한다 — ZIP 먼저, 터미널은 접어서."""
+    text = (REPO / "README.md").read_text(encoding="utf-8")
+    assert "INSTALL.md" in text, "README 가 INSTALL.md 로 안내하지 않는다"
+    assert "Download ZIP" in text, "README 설치 절에 ZIP 경로가 없다"
+    assert "<details>" in text, "README 의 터미널 경로가 <details> 로 접혀 있지 않다"
+    assert text.index("Download ZIP") < text.index("git clone"), (
+        "README 가 터미널 경로를 ZIP 경로보다 먼저 보여준다"
+    )
