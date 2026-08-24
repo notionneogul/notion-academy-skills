@@ -56,27 +56,38 @@ def test_readme_states_write_skills_need_approval():
 
 
 def test_readme_separates_read_setup_and_write_skills():
-    """'쓰기' 라는 낱말이 어딘가 있는지가 아니라, 세 표가 실제로 나뉘어 있는지를 본다.
+    """'쓰기' 라는 낱말이 어딘가 있는지가 아니라, 네 표가 실제로 나뉘어 있는지를 본다.
 
     `academy-setup` 은 샘플 정리에서 **행을 옮긴다.** 값만 고치는 `academy-doctor` 와
     성격이 달라 「읽기 전용」에 둘 수 없고, 행을 만들지 않으니 「쓰기」도 아니다.
+
+    `academy-send` 는 반대쪽 끝이다 — 노션에 아무것도 쓰지 않지만 **되돌릴 수 없다.**
+    노션에 쓴 것은 보관 페이지로 되돌아오지만 학부모에게 나간 문자는 회수할 수 없어,
+    「쓰기」와 같은 표에 두면 위험도가 같아 보인다. 그래서 「발송」이 따로 있어야 한다.
     """
     text = (REPO / "README.md").read_text(encoding="utf-8")
-    headings = ["### 읽기 전용", "### 연결·정리", "### 쓰기"]
+    headings = ["### 읽기 전용", "### 연결·정리", "### 쓰기", "### 발송"]
     for heading in headings:
         assert re.search(rf"^{re.escape(heading)}\s*$", text, re.M), (
-            f"README 에 「{heading}」 표 제목이 없다 — 세 분류가 표로 나뉘어 있어야 한다"
+            f"README 에 「{heading}」 표 제목이 없다 — 네 분류가 표로 나뉘어 있어야 한다"
         )
     positions = [text.index(h) for h in headings]
     assert positions == sorted(positions), (
-        f"README 의 세 분류 순서가 읽기 전용 → 연결·정리 → 쓰기 가 아니다: {positions}"
+        f"README 의 네 분류 순서가 읽기 전용 → 연결·정리 → 쓰기 → 발송 이 아니다: {positions}"
     )
     read_section = text.split("### 읽기 전용", 1)[1].split("### 연결·정리", 1)[0]
     setup_section = text.split("### 연결·정리", 1)[1].split("### 쓰기", 1)[0]
-    write_section = text.split("### 쓰기", 1)[1]
+    write_section = text.split("### 쓰기", 1)[1].split("### 발송", 1)[0]
+    send_section = text.split("### 발송", 1)[1]
 
     assert "| `academy-setup` |" in setup_section, (
         "README 「연결·정리」 표에 academy-setup 행이 없다"
+    )
+    assert "| `academy-send` |" in send_section, (
+        "README 「발송」 표에 academy-send 행이 없다"
+    )
+    assert "| `academy-send` |" not in write_section, (
+        "README 「쓰기」 표에 academy-send 가 들어가 있다 — 되돌릴 수 없어 분류가 다르다"
     )
     for section, name in [(read_section, "읽기 전용"), (write_section, "쓰기")]:
         assert "| `academy-setup` |" not in section, (
@@ -98,6 +109,21 @@ def test_readme_states_message_does_not_send():
         "README 가 '발송하지 않는다' 를 명시하지 않았다"
     )
     assert "자동 발송합니다" not in text and "자동으로 발송한다" not in text
+
+
+def test_readme_no_longer_claims_it_never_sends():
+    text = (REPO / "README.md").read_text(encoding="utf-8")
+    assert "자동으로 발송하지 않습니다" not in text, (
+        "academy-send 가 생겼는데 README 가 아직 발송하지 않는다고 적는다"
+    )
+    assert "승인" in text and "발송" in text, (
+        "README 가 발송에 승인이 필요하다는 것을 밝히지 않는다"
+    )
+
+
+def test_install_lists_twelve_skill_folders():
+    text = (REPO / "INSTALL.md").read_text(encoding="utf-8")
+    assert "12개" in text, "INSTALL 의 스킬 개수가 갱신되지 않았다"
 
 
 def test_install_matches_skill_folder_list():

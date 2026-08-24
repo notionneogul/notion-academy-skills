@@ -159,7 +159,7 @@ def test_db_map_lists_write_blocked_properties_per_database():
 def test_db_map_fingerprint_excludes_optional_claude_message_property():
     """`클로드 문자` 는 최초 스캔 이후 추가된 속성이라 지문표에 들어가면 안 된다.
 
-    지문표에 있으면 구버전 복제본에서 11개 스킬 전부가 연결 단계에서 멈춘다.
+    지문표에 있으면 구버전 복제본에서 12개 스킬 전부가 연결 단계에서 멈춘다.
     """
     text = (CORE_REFS / "db-map.md").read_text(encoding="utf-8")
     fingerprint = text.split("## 스키마 지문표", 1)[1].split("## ", 1)[0]
@@ -321,4 +321,35 @@ def test_write_skill_points_at_core_undo_split(skill):
     )
     assert re.search(r"write-gate\.md`?\s*(?:4~)?6단계", text), (
         f"{skill} 이 되돌리기 규칙의 출처인 write-gate.md 6단계를 가리키지 않는다"
+    )
+
+
+def test_write_safety_allows_send_with_approval():
+    text = (CORE_REFS / "write-safety.md").read_text(encoding="utf-8")
+    assert "알림톡·문자 발송" in text, "write-safety.md 에 발송 경계 행이 없다"
+    send_row = [ln for ln in text.splitlines() if "알림톡·문자 발송" in ln][0]
+    assert "금지" not in send_row, (
+        "발송이 아직 금지로 적혀 있다 — academy-send 가 생겼으므로 승인 경계로 바뀌어야 한다"
+    )
+    assert "승인" in send_row, "발송 경계에 승인 조건이 없다"
+
+
+def test_message_link_tokens_are_composable_with_domain():
+    text = (SKILLS / "academy-message" / "SKILL.md").read_text(encoding="utf-8")
+    assert "구조적으로 채울 수 없다" not in text, (
+        "링크를 구조적으로 불가능하다고 단정한 서술이 남아 있다 — 우피 도메인이 있으면 조립된다"
+    )
+    assert "oopy_domain" in text, (
+        "academy-message 가 send.oopy_domain 을 언급하지 않는다"
+    )
+
+
+def test_message_examples_do_not_contradict_link_token_fix():
+    """examples.md 가 SKILL.md 와 어긋나는 옛 "구조적으로 채울 수 없다" 서술을 남기지 않았는지 본다."""
+    text = (SKILLS / "academy-message" / "references" / "examples.md").read_text(
+        encoding="utf-8"
+    )
+    assert "구조적으로 채울 수 없다" not in text, (
+        "examples.md 에 링크를 구조적으로 불가능하다고 단정한 옛 서술이 남아 있다 — "
+        "SKILL.md 와 모순된다"
     )
