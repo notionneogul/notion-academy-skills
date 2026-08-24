@@ -149,8 +149,8 @@ def test_saving_is_opt_in_and_names_the_local_only_caveat(skill_text):
 def test_examples_cover_three_route_two_situations(examples_text):
     headings = re.findall(r"^## (\d)\. (.+)$", examples_text, re.M)
     numbers = [n for n, _ in headings]
-    assert numbers == [str(i) for i in range(1, 9)], (
-        f"예시 번호가 1~8로 이어지지 않는다: {numbers}"
+    assert numbers == [str(i) for i in range(1, 10)], (
+        f"예시 번호가 1~9로 이어지지 않는다: {numbers}"
     )
 
     titles = " / ".join(t for _, t in headings)
@@ -166,7 +166,7 @@ def test_examples_declare_independence_of_new_cases(examples_text):
     ex6 = re.search(r"^## 6\. .*?(?=^## 7\. )", examples_text, re.M | re.S).group(0)
     assert "독립 상황이다" in ex6, "예시 6의 독립 여부 표시가 없다"
 
-    ex8 = re.search(r"^## 8\. .*?(?=^## 참고)", examples_text, re.M | re.S).group(0)
+    ex8 = re.search(r"^## 8\. .*?(?=^## 9\. )", examples_text, re.M | re.S).group(0)
     assert "대화 자체는 새로 시작한다" in ex8, "예시 8의 독립 여부 표시가 없다"
 
 

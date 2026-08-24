@@ -210,3 +210,112 @@ def test_example_walks_the_unknown_fallback_branch():
     assert re.search(r"문자 왔대.{0,40}거기서 끝난다", body), (
         "예시 8 에 「이미 왔다」쪽에서 멈추는 갈래가 없다"
     )
+
+
+def test_alimtalk_reads_prefilled_variables_instead_of_recomputing():
+    """`variables` 가 있는 템플릿은 채워 둔 속성값을 그대로 읽는다.
+
+    이 갈래가 없으면 `academy-message` 알림톡 모드가 원장의 승인을 받아 채운 값이
+    발송에 쓰이지 않고, 발송이 원본에서 새로 계산한 다른 내용이 학부모에게 나간다.
+    낱말 하나가 아니라 **판정 문구 두 짝**을 본다 — 「그대로 읽는다」와 「다시 계산하지
+    않는다」가 같은 갈래 안에 붙어 있는지, 그리고 그 반대 갈래(`variables` 가 없으면
+    원본에서 계산한다)가 남아 있는지. 한쪽만 남으면 두 템플릿 중 하나가 깨진다.
+    """
+    text = _skill()
+    branch = re.search(
+        r"`variables` 가 있으면.{0,300}?그대로 읽어.{0,120}?"
+        r"원본 데이터에서 다시 계산하지 않는다",
+        text,
+        re.S,
+    )
+    assert branch, (
+        "`variables` 가 있는 템플릿에서 속성값을 그대로 읽고 다시 계산하지 않는다는 "
+        "판정이 3단계에 없다 — 알림톡 모드가 채운 값이 발송에 쓰이지 않는다"
+    )
+    assert re.search(
+        r"다시 계산하면 원장이 승인한 것과 다른 내용이", text
+    ), "다시 계산하면 원장이 승인한 것과 다른 내용이 나간다는 사유가 없다"
+    assert re.search(
+        r"`variables` 가 없으면.{0,400}?원본 데이터를 읽어 계산한다", text, re.S
+    ), (
+        "`variables` 가 없는 기존 템플릿(「2026 학원관리」)이 원본에서 계산한다는 "
+        "갈래가 사라졌다"
+    )
+
+    setup = SETUP.read_text(encoding="utf-8")
+    assert re.search(
+        r"`variables` 가 있으면 이 단계를 건너뛴다", setup
+    ), "setup.md 5단계가 `variables` 있는 템플릿에서 11개 대조를 건너뛰지 않는다"
+
+
+def test_half_filled_template_entry_does_not_start_a_send():
+    """이름표만 있고 `template_id` 가 빈 항목으로 발송을 시작하지 않는다."""
+    text = _skill()
+    assert re.search(r"상황 이름표가 있는지.{0,80}`template_id` 가 비어 있지 않은지", text), (
+        "2단계 채널 판정이 이름표만 보고 `template_id` 가 찼는지 보지 않는다"
+    )
+    setup = SETUP.read_text(encoding="utf-8")
+    assert re.search(
+        r"`template_id`·`name` 만 채우고.{0,60}그대로 둔다.{0,40}덮어쓰지 않는다", setup
+    ), (
+        "setup.md 4단계가 기존 항목을 덮어쓰지 말고 채우라고 적지 않는다 — "
+        "`variables`·`fixed_length` 가 사라진다"
+    )
+    assert re.search(r"이름표를 두 스킬이 각각 붙이므로.{0,60}두 키로 갈릴 수 있다", setup), (
+        "이름표가 두 키로 갈릴 수 있다는 경고가 없다"
+    )
+
+
+def test_alimtalk_fills_variables_outside_the_list_including_the_name():
+    """「가」 갈래가 `variables` 목록 밖의 변수도 채운다 — `#{이름}` 이 그것이다.
+
+    `variables` 에는 `academy-template` 이 만든 다섯 칸의 이름만 들어 있는데
+    템플릿 본문은 `[#{이름} 학생 월간 리포트]` 로 시작한다. 목록 안만 채우면
+    이름 자리가 빈 채로 학부모에게 나가거나 발송이 실패한다. 낱말이 아니라
+    **판정 문구**를 본다 — 목록 밖 변수도 채운다는 규칙, 그 값의 출처가 `학생`
+    DB 의 사람 이름이라는 것, 그리고 과목 페이지 이름이 아니라는 부정까지.
+    """
+    text = _skill()
+    assert re.search(
+        r"`variables` 목록에 없는 변수가 템플릿 본문에 있으면 그것도 채운다", text
+    ), "「가」 갈래가 `variables` 목록 밖의 변수를 채운다는 규칙이 없다"
+    assert re.search(
+        r"`#\{이름\}`.{0,120}?`학생` DB 의 `이름`", text, re.S
+    ), "`#{이름}` 의 값이 `학생` DB 의 이름이라는 출처가 없다"
+    assert re.search(
+        r"과목 페이지의 이름\(「김서준 수학」\)이 아니다", text
+    ), "과목 페이지 이름이 아니라는 부정이 없다 — 그 title 은 사람 이름이 아니다"
+    assert re.search(
+        r"채울 수 없는 변수가 남으면.{0,80}보내지도 않는다", text, re.S
+    ), "채울 수 없는 변수가 남았을 때 그대로 보내지 않는다는 판정이 없다"
+
+    # 속성을 만드는 쪽도 같은 출처를 적어야 한다 — title 이라고 적혀 있으면 안 된다.
+    template = (SKILLS / "academy-template" / "SKILL.md").read_text(encoding="utf-8")
+    assert re.search(
+        r"`학생 과목별 페이지` 의 title 은 「김서준 수학」이라 사람 이름이 아니다", template
+    ), "academy-template 이 `#{이름}` 을 과목 페이지 title 로 잘못 적고 있다"
+    assert "title 속성이라" not in template, (
+        "academy-template 에 `#{이름}` 이 과목 페이지 title 속성이라는 옛 서술이 남아 있다"
+    )
+
+
+def test_examples_walk_the_variables_branch():
+    """`variables` 갈래를 실제로 걷는 발송 예시가 있어야 한다.
+
+    이 예시가 없어서 `#{이름}` 이 아무에게도 안 채워지는 구멍이 한 라운드 동안
+    가려져 있었다. 한 통을 조립해 보이는 예시가 그 자리에서 드러낸다.
+    """
+    text = (SEND / "references" / "examples.md").read_text(encoding="utf-8")
+    assert re.search(r"^## 9\. 「가」 갈래", text, re.M), (
+        "`variables` 갈래를 걷는 예시가 없다 — 발송 예시가 전부 「나」·문자 쪽이다"
+    )
+    body = text.split("## 9. 「가」 갈래", 1)[1]
+    assert "[김서준 학생 월간 리포트]" in body, (
+        "예시 9 가 조립된 본문 한 통을 보이지 않는다 — `#{이름}` 이 어디에 들어가는지 안 드러난다"
+    )
+    assert re.search(r'"#\{이름\}": "김서준"', body), (
+        "예시 9 가 발송 호출 본문에서 `#{이름}` 을 채우는 것을 보이지 않는다"
+    )
+    assert re.search(r"출결·시험·과제 원본은 열지 않는다", body), (
+        "예시 9 가 원본을 다시 읽지 않는다는 것을 보이지 않는다"
+    )

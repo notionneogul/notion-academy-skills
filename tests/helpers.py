@@ -19,3 +19,6 @@ WRITE_SKILLS = [
     "academy-message",
     "academy-tuition",
 ]
+
+# academy-template 은 행을 만들지 않고 데이터베이스 스키마(속성)만 바꾼다 — WRITE_SKILLS 가 아니다.
+SCHEMA_SKILLS = ["academy-template"]

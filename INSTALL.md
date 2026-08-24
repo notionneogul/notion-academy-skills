@@ -9,7 +9,7 @@
 | 0 | Claude Code 가 무엇인지 알기 | 아니요 |
 | 1 | Claude Code 설치하고 로그인하기 | 예 (이 단계에서 한 번만) |
 | 2 | 노션 커넥터에 템플릿 페이지 추가하기 | 아니요 |
-| 3 | 스킬 폴더 12개 복사하기 | 아니요 (터미널 방법도 따로 있습니다) |
+| 3 | 스킬 폴더 13개 복사하기 | 아니요 (터미널 방법도 따로 있습니다) |
 | 4 | 「학원 템플릿 연결해줘」 실행하기 | 아니요 |
 
 ## 0단계. Claude Code 가 무엇인가요
@@ -166,13 +166,13 @@ Claude Code 를 아직 한 번도 실행하지 않았다면 이 폴더가 없을
 2. 초록색 `Code` 버튼을 누르고 `Download ZIP` 을 선택합니다.
    `[스크린샷 자리: 위 주소를 열었을 때 보이는 초록색 Code 버튼과 Download ZIP 메뉴]`
 3. 내려받은 ZIP 파일을 두 번 눌러 압축을 풉니다. 보통 `notion-academy-skills-main` 이라는 이름의 폴더가 생깁니다.
-4. 그 폴더를 열면 안에 `skills` 폴더가 있습니다. **`skills` 폴더를 열면 `academy-` 로 시작하는 폴더가 12개** 보입니다.
+4. 그 폴더를 열면 안에 `skills` 폴더가 있습니다. **`skills` 폴더를 열면 `academy-` 로 시작하는 폴더가 13개** 보입니다.
 5. 창을 하나 더 열어 위 표대로 `.claude` 폴더로 이동한 뒤, 그 안의 `skills` 폴더로 들어갑니다. (`skills` 폴더가 없으면 새로 만듭니다.)
-6. 4번에서 본 **`academy-` 폴더 12개를 전부 선택**해서(맥 `Command + A`, 윈도우 `Ctrl + A`) 5번에서 연 `.claude/skills` 창 안으로 끌어넣습니다.
+6. 4번에서 본 **`academy-` 폴더 13개를 전부 선택**해서(맥 `Command + A`, 윈도우 `Ctrl + A`) 5번에서 연 `.claude/skills` 창 안으로 끌어넣습니다.
 
 #### ⚠️ 여기서 가장 많이 틀립니다
 
-**`skills` 폴더를 통째로 넣으면 안 됩니다. 그 안의 12개 폴더를 넣어야 합니다.**
+**`skills` 폴더를 통째로 넣으면 안 됩니다. 그 안의 13개 폴더를 넣어야 합니다.**
 
 잘못된 모습 — `skills` 안에 `skills` 가 또 생겼습니다.
 
@@ -185,7 +185,7 @@ Claude Code 를 아직 한 번도 실행하지 않았다면 이 폴더가 없을
         └── ...
 ```
 
-맞는 모습 — `skills` 바로 아래에 `academy-` 폴더 12개가 있습니다.
+맞는 모습 — `skills` 바로 아래에 `academy-` 폴더 13개가 있습니다.
 
 ```
 .claude/
@@ -203,10 +203,11 @@ Claude Code 를 아직 한 번도 실행하지 않았다면 이 폴더가 없을
     ├── academy-enroll/
     ├── academy-tuition/
     ├── academy-message/
+    ├── academy-template/
     └── academy-send/
 ```
 
-이미 잘못 넣었다면, `.claude/skills` 안의 `skills` 폴더를 열어 그 안의 12개를 한 단계 위로 옮기고 빈 `skills` 폴더를 지우면 됩니다.
+이미 잘못 넣었다면, `.claude/skills` 안의 `skills` 폴더를 열어 그 안의 13개를 한 단계 위로 옮기고 빈 `skills` 폴더를 지우면 됩니다.
 
 ### 경로 B — 터미널 (터미널을 써 본 적 있다면 이 방법이 더 빠릅니다)
 
@@ -222,15 +223,15 @@ mkdir -p ~/.claude/skills
 cp -r skills/* ~/.claude/skills/
 ```
 
-맥에서는 `ls ~/.claude/skills/ | grep academy | wc -l` 이 `12` 이면 맞습니다.
+맥에서는 `ls ~/.claude/skills/ | grep academy | wc -l` 이 `13` 이면 맞습니다.
 
-윈도우 PowerShell 이라면 `Get-ChildItem $env:USERPROFILE\.claude\skills` 로 `academy-` 폴더 12개가 보이는지 확인합니다.
+윈도우 PowerShell 이라면 `Get-ChildItem $env:USERPROFILE\.claude\skills` 로 `academy-` 폴더 13개가 보이는지 확인합니다.
 
 </details>
 
 ### 무엇이 들어가야 하나요
 
-스킬은 폴더째 `.claude/skills/` 아래로 들어갑니다. **`academy-core` 와 나머지 11개 스킬 폴더, 총 12개**가 그대로 들어가야 합니다.
+스킬은 폴더째 `.claude/skills/` 아래로 들어갑니다. 공유 규칙 폴더 `academy-core` 를 포함해 **총 13개**가 그대로 들어가야 합니다.
 
 | 구분 | 폴더 |
 |---|---|
@@ -238,6 +239,7 @@ cp -r skills/* ~/.claude/skills/
 | 읽기 전용 (2) | `academy-insight` · `academy-doctor` |
 | 연결·정리 (1) | `academy-setup` |
 | 쓰기 (7) | `academy-attendance` · `academy-homework` · `academy-exam` · `academy-counsel` · `academy-enroll` · `academy-tuition` · `academy-message` |
+| 알림톡 준비 (1) | `academy-template` |
 | 발송 (1) | `academy-send` |
 
 각 폴더 안에는 `SKILL.md` 파일이 들어 있습니다. `academy-setup` 폴더를 열었을 때 `SKILL.md` 가 보이면 제대로 들어간 것입니다.

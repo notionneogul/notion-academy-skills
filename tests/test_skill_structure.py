@@ -121,9 +121,18 @@ def test_readme_no_longer_claims_it_never_sends():
     )
 
 
-def test_install_lists_twelve_skill_folders():
+def test_install_lists_thirteen_skill_folders():
     text = (REPO / "INSTALL.md").read_text(encoding="utf-8")
-    assert "12개" in text, "INSTALL 의 스킬 개수가 갱신되지 않았다"
+    assert "13개" in text, "INSTALL 의 스킬 개수가 갱신되지 않았다"
+    assert "12개" not in text, "INSTALL 에 옛 개수가 남아 있다"
+
+
+def test_readme_places_template_in_setup_group():
+    text = (REPO / "README.md").read_text(encoding="utf-8")
+    setup_section = text.split("### 연결·정리", 1)[1].split("### 쓰기", 1)[0]
+    assert "| `academy-template` |" in setup_section, (
+        "README 「연결·정리」 표에 academy-template 행이 없다"
+    )
 
 
 def test_install_matches_skill_folder_list():
