@@ -1,6 +1,6 @@
 ---
 name: academy-core
-description: 학원 관리 PRO 스킬들이 공유하는 규칙 문서 보관소. 직접 호출하지 말 것. 읽기 전용 3개(academy-setup, academy-insight, academy-doctor)와 쓰기 7개(academy-attendance, academy-homework, academy-exam, academy-counsel, academy-enroll, academy-tuition, academy-message)와 알림톡 준비 1개(academy-template)와 발송 1개(academy-send), 총 12개 스킬이 references 폴더의 파일을 상대 경로로 읽어 쓴다.
+description: 학원 관리 PRO 스킬들이 공유하는 규칙 문서 보관소. 직접 호출하지 말 것. 읽기 전용 3개(academy-setup, academy-insight, academy-doctor)와 쓰기 7개(academy-attendance, academy-homework, academy-exam, academy-counsel, academy-enroll, academy-tuition, academy-message)와 알림톡 준비 1개(academy-template)와 리포트 1개(academy-report)와 발송 1개(academy-send), 총 13개 스킬이 references 폴더의 파일을 상대 경로로 읽어 쓴다.
 ---
 
 # 학원 스킬 공유 규칙

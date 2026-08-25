@@ -121,10 +121,10 @@ def test_readme_no_longer_claims_it_never_sends():
     )
 
 
-def test_install_lists_thirteen_skill_folders():
+def test_install_lists_fourteen_skill_folders():
     text = (REPO / "INSTALL.md").read_text(encoding="utf-8")
-    assert "13개" in text, "INSTALL 의 스킬 개수가 갱신되지 않았다"
-    assert "12개" not in text, "INSTALL 에 옛 개수가 남아 있다"
+    assert "14개" in text, "INSTALL 의 스킬 개수가 갱신되지 않았다"
+    assert "13개" not in text, "INSTALL 에 옛 개수가 남아 있다"
 
 
 def test_readme_places_template_in_setup_group():
@@ -183,3 +183,35 @@ def test_readme_install_shows_zip_before_terminal():
     assert text.index("Download ZIP") < text.index("git clone"), (
         "README 가 터미널 경로를 ZIP 경로보다 먼저 보여준다"
     )
+
+
+def test_readme_places_report_in_write_group():
+    text = (REPO / "README.md").read_text(encoding="utf-8")
+    write_section = text.split("### 쓰기", 1)[1].split("### 발송", 1)[0]
+    assert "| `academy-report` |" in write_section, (
+        "README 「쓰기」 표에 academy-report 행이 없다"
+    )
+
+
+def test_readme_utterances_include_report():
+    """'## 대표 발화' 뒤 파일 끝까지가 아니라 그 절 안에서만 찾는다.
+
+    구간을 안 닫으면 뒤쪽 「하지 않는 것」 절의 '월말 리포트' 언급에 걸려,
+    대표 발화 목록에서 리포트 항목을 지워도 이 테스트가 통과한다(실측 확인).
+    """
+    text = (REPO / "README.md").read_text(encoding="utf-8")
+    section = text.split("## 대표 발화", 1)[1].split("## 요구 사항", 1)[0]
+    assert re.search(r'^- ".*월말 리포트.*"\s*$', section, re.M), (
+        "README 대표 발화 목록에 월말 리포트 발화가 항목 형태로 없다"
+    )
+
+
+def test_install_explains_report_form():
+    text = (REPO / "INSTALL.md").read_text(encoding="utf-8")
+    assert "report-form.html" in text, "INSTALL 에 양식 파일 경로 안내가 없다"
+
+
+def test_troubleshooting_covers_report():
+    text = (REPO / "TROUBLESHOOTING.md").read_text(encoding="utf-8")
+    assert "◯◯ 수학학원" in text, "TROUBLESHOOTING 에 기본 양식 증상이 없다"
+    assert "크롬" in text, "TROUBLESHOOTING 에 크롬 관련 증상이 없다"

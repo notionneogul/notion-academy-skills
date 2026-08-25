@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>월말 리포트 — 김서준 (2026년 8월)</title>
+<style>
+  /* ────────────────────────────────────────────────────────────
+     월말 리포트 양식 v0.1 — 고치실 곳은 아래 :root 변수부터 보세요.
+     A4 세로 1장 기준입니다. 인쇄(Cmd+P) → PDF 로 저장하면 그대로 나옵니다.
+
+     이 파일을 고쳐 ~/.academy/report-form.html 로 저장하면 스킬이 그것을 읽습니다.
+     저장하지 않으면 이 기본 양식이 쓰이고, 학원 이름이 "◯◯ 수학학원" 인 채로
+     학부모에게 나갑니다.
+     ──────────────────────────────────────────────────────────── */
+  :root {
+    --brand:        #1f4e79;   /* 학원 대표색 — 제목 줄, 표 머리 */
+    --brand-light:  #eaf1f8;
+    --ink:          #1a1a1a;
+    --ink-soft:     #5a5a5a;
+    --line:         #d8dee5;
+    --good:         #1a7f4b;
+    --warn:         #b45309;
+    --bad:          #b3261e;
+    --page-pad:     14mm;
+  }
+
+  @page { size: A4; margin: 0; }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    font-family: "Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", "맑은 고딕", sans-serif;
+    color: var(--ink);
+    font-size: 10.5pt;
+    line-height: 1.55;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    background: #f2f4f7;
+  }
+
+  .page {
+    width: 210mm;
+    min-height: 297mm;
+    padding: var(--page-pad);
+    margin: 0 auto;
+    background: #fff;
+  }
+  @media screen { .page { margin: 16px auto; box-shadow: 0 2px 16px rgba(0,0,0,.12); } }
+
+  /* ── 머리글 ───────────────────────────────────────────────── */
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    border-bottom: 2.5px solid var(--brand);
+    padding-bottom: 8px;
+  }
+  .academy { font-size: 12pt; font-weight: 700; color: var(--brand); letter-spacing: -.02em; }
+  .doc-title { font-size: 19pt; font-weight: 800; letter-spacing: -.03em; margin-top: 2px; }
+  .period { text-align: right; font-size: 9.5pt; color: var(--ink-soft); line-height: 1.4; }
+
+  /* ── 학생 정보 줄 ─────────────────────────────────────────── */
+  .who {
+    display: flex;
+    gap: 0;
+    margin: 10px 0 14px;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .who div { flex: 1; padding: 7px 10px; border-right: 1px solid var(--line); }
+  .who div:last-child { border-right: 0; }
+  .who dt { font-size: 8.5pt; color: var(--ink-soft); margin: 0; }
+  .who dd { font-size: 11pt; font-weight: 700; margin: 1px 0 0; }
+
+  /* ── 요약 카드 ────────────────────────────────────────────── */
+  .summary { display: flex; gap: 8px; margin-bottom: 14px; }
+  .card {
+    flex: 1;
+    background: var(--brand-light);
+    border-radius: 5px;
+    padding: 9px 11px;
+  }
+  .card .label { font-size: 8.5pt; color: var(--ink-soft); }
+  .card .value { font-size: 16pt; font-weight: 800; letter-spacing: -.03em; line-height: 1.2; }
+  .card .sub   { font-size: 8.5pt; color: var(--ink-soft); }
+
+  /* ── 구역 ─────────────────────────────────────────────────── */
+  section { margin-bottom: 13px; break-inside: avoid; }
+  h2 {
+    font-size: 11pt;
+    font-weight: 800;
+    margin: 0 0 6px;
+    padding-left: 8px;
+    border-left: 3.5px solid var(--brand);
+    letter-spacing: -.02em;
+  }
+  h2 .hint { font-weight: 500; font-size: 8.5pt; color: var(--ink-soft); margin-left: 6px; letter-spacing: 0; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 9.5pt; }
+  th, td { padding: 5px 8px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+  thead th {
+    background: var(--brand-light);
+    font-size: 8.5pt;
+    font-weight: 700;
+    color: var(--brand);
+    border-bottom: 1px solid var(--line);
+    white-space: nowrap;
+  }
+  td.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  tbody tr:last-child td { border-bottom: 0; }
+
+  .tag { display: inline-block; padding: 1px 7px; border-radius: 10px; font-size: 8.5pt; font-weight: 700; }
+  .tag.good { background: #e6f4ec; color: var(--good); }
+  .tag.warn { background: #fdf1e3; color: var(--warn); }
+  .tag.bad  { background: #fdeceb; color: var(--bad); }
+
+  .empty {
+    padding: 10px;
+    background: #fafbfc;
+    border: 1px dashed var(--line);
+    border-radius: 4px;
+    font-size: 9.5pt;
+    color: var(--ink-soft);
+  }
+
+  .note {
+    background: #fafbfc;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 10px 12px;
+    font-size: 9.5pt;
+    line-height: 1.7;
+    white-space: pre-line;
+  }
+
+  footer {
+    margin-top: 16px;
+    padding-top: 8px;
+    border-top: 1px solid var(--line);
+    display: flex;
+    justify-content: space-between;
+    font-size: 8pt;
+    color: var(--ink-soft);
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header>
+    <div>
+      <div class="academy">◯◯ 수학학원</div>
+      <div class="doc-title">월말 학습 리포트</div>
+    </div>
+    <div class="period">
+      2026년 8월<br>
+      2026-08-01 ~ 2026-08-25<br>
+      발행일 2026-08-25
+    </div>
+  </header>
+
+  <dl class="who">
+    <div><dt>학생</dt><dd>김서준</dd></div>
+    <div><dt>과목 / 반</dt><dd>수학 · 고2 수학 심화 A</dd></div>
+    <div><dt>수업 요일</dt><dd>월 · 수 · 금</dd></div>
+    <div><dt>담당</dt><dd>◯◯◯ 선생님</dd></div>
+  </dl>
+
+  <div class="summary">
+    <div class="card">
+      <div class="label">출석</div>
+      <div class="value">10 / 10</div>
+      <div class="sub">결석·지각 없음</div>
+    </div>
+    <div class="card">
+      <div class="label">시험</div>
+      <div class="value">2회</div>
+      <div class="sub">재시험 1회</div>
+    </div>
+    <div class="card">
+      <div class="label">과제</div>
+      <div class="value">3회</div>
+      <div class="sub">8/05 보통 · 8/12 미흡 · 8/19 평가 전</div>
+    </div>
+    <div class="card">
+      <div class="label">상담</div>
+      <div class="value">0회</div>
+      <div class="sub">이번 달 기록 없음</div>
+    </div>
+  </div>
+
+  <section>
+    <h2>출결</h2>
+    <table>
+      <thead>
+        <tr><th style="width:22%">날짜</th><th style="width:18%">상태</th><th>비고</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>8/03 (월)</td><td><span class="tag good">출석</span></td><td>—</td></tr>
+        <tr><td>8/05 (수)</td><td><span class="tag good">출석</span></td><td>—</td></tr>
+        <tr><td>8/07 (금)</td><td><span class="tag good">출석</span></td><td>—</td></tr>
+        <tr><td>8/10 (월)</td><td><span class="tag good">출석</span></td><td>—</td></tr>
+        <tr><td>8/12 (수)</td><td><span class="tag good">출석</span></td><td>—</td></tr>
+        <tr><td>8/14 (금)</td><td><span class="tag good">출석</span></td><td>—</td></tr>
+        <tr><td>8/17 (월)</td><td><span class="tag good">출석</span></td><td>—</td></tr>
+        <tr><td>8/19 (수)</td><td><span class="tag good">출석</span></td><td>—</td></tr>
+        <tr><td>8/21 (금)</td><td><span class="tag good">출석</span></td><td>—</td></tr>
+        <tr><td>8/24 (월)</td><td><span class="tag good">출석</span></td><td>—</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>시험<span class="hint">반 평균은 같은 반 재원생 4명 기준입니다</span></h2>
+    <table>
+      <thead>
+        <tr>
+          <th style="width:16%">날짜</th>
+          <th>시험명</th>
+          <th class="num" style="width:13%">점수</th>
+          <th class="num" style="width:11%">득점률</th>
+          <th class="num" style="width:13%">반 평균</th>
+          <th style="width:13%">결과</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>8/10 (월)</td>
+          <td>8/10 고2수학 주간평가 <span style="color:var(--ink-soft)">· 주간평가</span></td>
+          <td class="num">31 / 50</td>
+          <td class="num">62%</td>
+          <td class="num">40.8 / 50</td>
+          <td><span class="tag warn">재시험</span></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td style="color:var(--ink-soft)">└ 재시험</td>
+          <td class="num">40 / 50</td>
+          <td class="num">80%</td>
+          <td class="num">—</td>
+          <td><span class="tag good">통과</span></td>
+        </tr>
+        <tr>
+          <td>8/19 (수)</td>
+          <td>8/19 고2수학 데일리테스트 <span style="color:var(--ink-soft)">· 데일리테스트</span></td>
+          <td class="num">22 / 40</td>
+          <td class="num">55%</td>
+          <td class="num">31.8 / 40</td>
+          <td><span class="tag bad">재시험</span></td>
+        </tr>
+      </tbody>
+    </table>
+    <p style="font-size:9pt;color:var(--ink-soft);margin:6px 0 0">
+      8/19 데일리테스트는 재시험 일정을 조율하고 있습니다.
+    </p>
+  </section>
+
+  <section>
+    <h2>수업 진도와 과제<span class="hint">평가는 그 수업일에 검사한 <b>직전 과제</b>에 대한 것입니다</span></h2>
+    <table>
+      <thead>
+        <tr>
+          <th style="width:15%">수업일</th>
+          <th style="width:26%">진도</th>
+          <th>내어드린 과제</th>
+          <th style="width:14%">직전 과제 평가</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>8/05 (수)</td>
+          <td>지수함수와 로그함수</td>
+          <td>쎈수학 196~204p</td>
+          <td><span class="tag bad">미흡</span><br><span style="font-size:8.5pt;color:var(--ink-soft)">7월 말 과제</span></td>
+        </tr>
+        <tr>
+          <td>8/12 (수)</td>
+          <td>삼각함수의 그래프</td>
+          <td>자이스토리 수학I 2단원 20문항</td>
+          <td><span class="tag warn">보통</span><br><span style="font-size:8.5pt;color:var(--ink-soft)">8/05 과제</span></td>
+        </tr>
+        <tr>
+          <td>8/19 (수)</td>
+          <td>삼각함수의 활용</td>
+          <td>자이스토리 수학I 3단원 15문항</td>
+          <td><span class="tag bad">미흡</span><br><span style="font-size:8.5pt;color:var(--ink-soft)">8/12 과제</span></td>
+        </tr>
+      </tbody>
+    </table>
+    <p style="font-size:9pt;color:var(--ink-soft);margin:6px 0 0">
+      선생님 메모 — 8/05 과제는 3단원 절반만 제출, 8/12 과제는 로그 계산 실수 2개, 8/19 과제도 절반만 풀어 왔습니다.
+    </p>
+  </section>
+
+  <section>
+    <h2>상담</h2>
+    <div class="empty">이번 달에는 상담 기록이 없습니다.</div>
+  </section>
+
+  <section>
+    <h2>이번 달 총평</h2>
+    <div class="note">출석은 열 번 수업에 모두 나왔습니다. 빠짐없이 나와 준 점은 그대로 이어 갔으면 합니다.
+
+다만 과제 제출량이 두 번 연속 절반에 머물렀습니다. 8/19 데일리테스트가 22점(반 평균 31.8점)으로 내려간 것도 과제로 다지는 양이 부족한 것과 이어져 있다고 봅니다. 8/10 주간평가는 재시험에서 40점으로 올렸으니, 문제를 못 푸는 것이 아니라 푸는 양이 모자란 상태입니다.
+
+9월에는 과제를 절반이 아니라 끝까지 풀어 오는 것 하나만 목표로 잡겠습니다. 가정에서도 제출 여부를 한 번씩 확인해 주시면 큰 도움이 되겠습니다. 8/19 재시험 일정은 확정되는 대로 따로 안내드리겠습니다.</div>
+  </section>
+
+  <footer>
+    <span>◯◯ 수학학원 · 문의 02-000-0000</span>
+    <span>김서준 · 2026년 8월 · 1/1</span>
+  </footer>
+
+</div>
+</body>
+</html>

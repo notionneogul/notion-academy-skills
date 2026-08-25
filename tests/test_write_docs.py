@@ -2,7 +2,7 @@ import re
 
 import pytest
 
-from helpers import SKILLS, WRITE_SKILLS
+from helpers import CONTENT_SKILLS, SKILLS, WRITE_SKILLS
 
 CORE_REFS = SKILLS / "academy-core" / "references"
 
@@ -269,7 +269,7 @@ def test_write_safety_gates_row_creation_on_approval():
     )
 
 
-@pytest.mark.parametrize("skill", WRITE_SKILLS)
+@pytest.mark.parametrize("skill", WRITE_SKILLS + CONTENT_SKILLS)
 def test_write_skill_references_gate(skill):
     skill_md = SKILLS / skill / "SKILL.md"
     if not skill_md.exists():
@@ -280,7 +280,7 @@ def test_write_skill_references_gate(skill):
     )
 
 
-@pytest.mark.parametrize("skill", WRITE_SKILLS)
+@pytest.mark.parametrize("skill", WRITE_SKILLS + CONTENT_SKILLS)
 def test_write_skill_has_examples(skill):
     skill_dir = SKILLS / skill
     if not (skill_dir / "SKILL.md").exists():
@@ -290,7 +290,7 @@ def test_write_skill_has_examples(skill):
     )
 
 
-@pytest.mark.parametrize("skill", WRITE_SKILLS)
+@pytest.mark.parametrize("skill", WRITE_SKILLS + CONTENT_SKILLS)
 def test_write_skill_states_no_write_without_approval(skill):
     """'승인' 이라는 글자가 있는지가 아니라, 승인 규칙의 단일 소스를 가리키는지를 본다.
 
@@ -352,4 +352,47 @@ def test_message_examples_do_not_contradict_link_token_fix():
     assert "구조적으로 채울 수 없다" not in text, (
         "examples.md 에 링크를 구조적으로 불가능하다고 단정한 옛 서술이 남아 있다 — "
         "SKILL.md 와 모순된다"
+    )
+
+
+def _content_skill_text(skill: str) -> str:
+    return (SKILLS / skill / "SKILL.md").read_text(encoding="utf-8")
+
+
+@pytest.mark.parametrize("skill", CONTENT_SKILLS)
+def test_content_skill_never_uses_replace_content(skill):
+    """replace_content 로 페이지 본문을 통째로 바꾸면 학부모가 우피로 보는 다섯 콜아웃이 사라진다."""
+    text = _content_skill_text(skill)
+    assert re.search(r"`replace_content`\s*를\s*쓰지 않는다", text), (
+        f"{skill} 이 replace_content 를 쓰지 않는다고 명시하지 않았다"
+    )
+
+
+@pytest.mark.parametrize("skill", CONTENT_SKILLS)
+def test_content_skill_attach_command_is_fixed(skill):
+    """붙이는 명령이 update_content/insert_content 로 고정돼 있는지 — command 를 짐작해 고르지 않는다."""
+    text = _content_skill_text(skill)
+    assert 'command: "update_content"' in text, (
+        f"{skill} 이 update_content 갈래를 command 로 고정하지 않았다"
+    )
+    assert 'command: "insert_content"' in text, (
+        f"{skill} 이 insert_content 갈래를 command 로 고정하지 않았다"
+    )
+
+
+@pytest.mark.parametrize("skill", CONTENT_SKILLS)
+def test_content_skill_never_creates_pages(skill):
+    """행을 만들지도 속성을 건드리지도 않는다 — notion-create-pages 가 SKILL.md 에 없어야 한다."""
+    text = _content_skill_text(skill)
+    assert "notion-create-pages" not in text, (
+        f"{skill} SKILL.md 에 notion-create-pages 가 나온다 — 이 스킬은 행을 만들지 않는다"
+    )
+
+
+@pytest.mark.parametrize("skill", CONTENT_SKILLS)
+def test_content_skill_does_not_send(skill):
+    """붙이는 데까지만 하고, 발송은 다른 스킬(academy-send)의 일이다."""
+    text = _content_skill_text(skill)
+    assert re.search(r"\*\*보내지 않는다\.?\*\*", text), (
+        f"{skill} 이 보내지 않는다는 것을 명시하지 않았다"
     )
