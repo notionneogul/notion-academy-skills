@@ -370,13 +370,19 @@ def test_content_skill_never_uses_replace_content(skill):
 
 @pytest.mark.parametrize("skill", CONTENT_SKILLS)
 def test_content_skill_attach_command_is_fixed(skill):
-    """붙이는 명령이 update_content/insert_content 로 고정돼 있는지 — command 를 짐작해 고르지 않는다."""
+    """붙이는 명령이 update_content 하나로 고정돼 있는지 — command 를 짐작해 고르지 않는다.
+
+    insert_content 는 2026-08-27 실측에서 기존 블록을 지우지는 않았으나 콜아웃을
+    새로 만든다. 원장이 템플릿의 「비고」를 「월말 리포트」로 바꿔 둔 사본에서는
+    같은 이름 콜아웃이 둘 생겼다. 그래서 붙이기는 이미 있는 콜아웃의 제목 줄을
+    앵커로 삼는 update_content 하나만 쓴다.
+    """
     text = _content_skill_text(skill)
     assert 'command: "update_content"' in text, (
         f"{skill} 이 update_content 갈래를 command 로 고정하지 않았다"
     )
-    assert 'command: "insert_content"' in text, (
-        f"{skill} 이 insert_content 갈래를 command 로 고정하지 않았다"
+    assert 'command: "insert_content"' not in text, (
+        f"{skill} 이 insert_content 로 붙인다 — 콜아웃을 새로 만들어 중복을 낳는다"
     )
 
 
