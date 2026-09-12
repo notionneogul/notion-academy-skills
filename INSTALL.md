@@ -9,7 +9,7 @@
 | 0 | Claude Code 가 무엇인지 알기 | 아니요 |
 | 1 | Claude Code 설치하고 로그인하기 | 예 (이 단계에서 한 번만) |
 | 2 | 노션 커넥터에 템플릿 페이지 추가하기 | 아니요 |
-| 3 | 스킬 폴더 14개 복사하기 | 아니요 (터미널 방법도 따로 있습니다) |
+| 3 | 스킬 폴더 13개 복사하기 | 아니요 (터미널 방법도 따로 있습니다) |
 | 4 | 「학원 템플릿 연결해줘」 실행하기 | 아니요 |
 
 ## 0단계. Claude Code 가 무엇인가요
@@ -107,7 +107,7 @@ claude mcp add --transport http --scope user notion https://mcp.notion.com/mcp
 
 노션 페이지 우측 상단 `···` 를 누르면 맨 아래에 `연결` 메뉴가 있습니다. 여기가 **「없음」인 채로 두셔도 정상입니다.**
 
-실제로 이 스킬 세트를 만들면서 쓴 「학원 관리 PRO X」 페이지도 `연결` 이 **「없음」** 인 상태로 데이터베이스 15개가 전부 정상 조회됐습니다. 커넥터는 노션 계정 권한을 그대로 따라가기 때문에, 페이지마다 따로 열어 줄 필요가 없습니다.
+실제로 이 스킬 세트를 만들면서 쓴 「학원 관리 PRO X」 페이지도 `연결` 이 **「없음」** 인 상태로 데이터베이스 14개가 전부 정상 조회됐습니다. 커넥터는 노션 계정 권한을 그대로 따라가기 때문에, 페이지마다 따로 열어 줄 필요가 없습니다.
 
 **그 목록에 「Claude」 가 보이더라도 그건 다른 것입니다.** `my-integrations` 에서 직접 만든 내부 통합이 있으면 이름이 그렇게 보일 수 있는데, 위에서 말씀드린 대로 이 스킬 세트는 그것을 쓰지 않습니다. 추가하셔도 달라지는 것이 없습니다.
 
@@ -166,13 +166,13 @@ Claude Code 를 아직 한 번도 실행하지 않았다면 이 폴더가 없을
 2. 초록색 `Code` 버튼을 누르고 `Download ZIP` 을 선택합니다.
    `[스크린샷 자리: 위 주소를 열었을 때 보이는 초록색 Code 버튼과 Download ZIP 메뉴]`
 3. 내려받은 ZIP 파일을 두 번 눌러 압축을 풉니다. 보통 `notion-academy-skills-main` 이라는 이름의 폴더가 생깁니다.
-4. 그 폴더를 열면 안에 `skills` 폴더가 있습니다. **`skills` 폴더를 열면 `academy-` 로 시작하는 폴더가 14개** 보입니다.
+4. 그 폴더를 열면 안에 `skills` 폴더가 있습니다. **`skills` 폴더를 열면 `academy-` 로 시작하는 폴더가 13개** 보입니다.
 5. 창을 하나 더 열어 위 표대로 `.claude` 폴더로 이동한 뒤, 그 안의 `skills` 폴더로 들어갑니다. (`skills` 폴더가 없으면 새로 만듭니다.)
-6. 4번에서 본 **`academy-` 폴더 14개를 전부 선택**해서(맥 `Command + A`, 윈도우 `Ctrl + A`) 5번에서 연 `.claude/skills` 창 안으로 끌어넣습니다.
+6. 4번에서 본 **`academy-` 폴더 13개를 전부 선택**해서(맥 `Command + A`, 윈도우 `Ctrl + A`) 5번에서 연 `.claude/skills` 창 안으로 끌어넣습니다.
 
 #### ⚠️ 여기서 가장 많이 틀립니다
 
-**`skills` 폴더를 통째로 넣으면 안 됩니다. 그 안의 14개 폴더를 넣어야 합니다.**
+**`skills` 폴더를 통째로 넣으면 안 됩니다. 그 안의 13개 폴더를 넣어야 합니다.**
 
 잘못된 모습 — `skills` 안에 `skills` 가 또 생겼습니다.
 
@@ -185,7 +185,7 @@ Claude Code 를 아직 한 번도 실행하지 않았다면 이 폴더가 없을
         └── ...
 ```
 
-맞는 모습 — `skills` 바로 아래에 `academy-` 폴더 14개가 있습니다.
+맞는 모습 — `skills` 바로 아래에 `academy-` 폴더 13개가 있습니다.
 
 ```
 .claude/
@@ -204,11 +204,10 @@ Claude Code 를 아직 한 번도 실행하지 않았다면 이 폴더가 없을
     ├── academy-tuition/
     ├── academy-message/
     ├── academy-report/
-    ├── academy-template/
-    └── academy-send/
+    └── academy-template/
 ```
 
-이미 잘못 넣었다면, `.claude/skills` 안의 `skills` 폴더를 열어 그 안의 14개를 한 단계 위로 옮기고 빈 `skills` 폴더를 지우면 됩니다.
+이미 잘못 넣었다면, `.claude/skills` 안의 `skills` 폴더를 열어 그 안의 13개를 한 단계 위로 옮기고 빈 `skills` 폴더를 지우면 됩니다.
 
 ### 경로 B — 터미널 (터미널을 써 본 적 있다면 이 방법이 더 빠릅니다)
 
@@ -224,25 +223,23 @@ mkdir -p ~/.claude/skills
 cp -r skills/* ~/.claude/skills/
 ```
 
-맥에서는 `ls ~/.claude/skills/ | grep academy | wc -l` 이 `14` 이면 맞습니다.
+맥에서는 `ls ~/.claude/skills/ | grep academy | wc -l` 이 `13` 이면 맞습니다.
 
-윈도우 PowerShell 이라면 `Get-ChildItem $env:USERPROFILE\.claude\skills` 로 `academy-` 폴더 14개가 보이는지 확인합니다.
+윈도우 PowerShell 이라면 `Get-ChildItem $env:USERPROFILE\.claude\skills` 로 `academy-` 폴더 13개가 보이는지 확인합니다.
 
 </details>
 
 ### 무엇이 들어가야 하나요
 
-스킬은 폴더째 `.claude/skills/` 아래로 들어갑니다. 공유 규칙 폴더 `academy-core` 를 포함해 **총 14개**가 그대로 들어가야 합니다.
+스킬은 폴더째 `.claude/skills/` 아래로 들어갑니다. 공유 규칙 폴더 `academy-core` 를 포함해 **총 13개**가 그대로 들어가야 합니다.
 
 | 구분 | 폴더 |
 |---|---|
 | 공유 규칙 (1) | `academy-core` |
 | 읽기 전용 (2) | `academy-insight` · `academy-doctor` |
 | 연결·정리 (1) | `academy-setup` |
-| 쓰기 (7) | `academy-attendance` · `academy-homework` · `academy-exam` · `academy-counsel` · `academy-enroll` · `academy-tuition` · `academy-message` |
+| 쓰기 (8) | `academy-attendance` · `academy-homework` · `academy-exam` · `academy-counsel` · `academy-enroll` · `academy-tuition` · `academy-message` · `academy-template` |
 | 리포트 (1) | `academy-report` |
-| 알림톡 준비 (1) | `academy-template` |
-| 발송 (1) | `academy-send` |
 
 각 폴더 안에는 `SKILL.md` 파일이 들어 있습니다. `academy-setup` 폴더를 열었을 때 `SKILL.md` 가 보이면 제대로 들어간 것입니다.
 
@@ -274,14 +271,14 @@ cp -r skills/* ~/.claude/skills/
 | 학생 | 42 | ✅ |
 | 클래스 | 8 | ✅ |
 | 출석부 | 1,204 | ✅ |
-...(총 15개)
+...(총 14개)
 
 ~/.academy/config.json 에 저장했습니다.
 ```
 
-위 표의 행 수는 형식을 보여 주기 위한 **예시일 뿐이고, 실제 값은 내 데이터에 따라 다릅니다.** 데이터베이스가 15개 나오고 전부 ✅ 인지만 확인하면 됩니다.
+위 표의 행 수는 형식을 보여 주기 위한 **예시일 뿐이고, 실제 값은 내 데이터에 따라 다릅니다.** 데이터베이스가 14개 나오고 전부 ✅ 인지만 확인하면 됩니다.
 
-이때 `~/.academy/config.json` 파일이 생기고, `databases` 키 아래에 데이터베이스 15개가 매핑됩니다.
+이때 `~/.academy/config.json` 파일이 생기고, `databases` 키 아래에 데이터베이스 14개가 매핑됩니다.
 
 **실패 증상:** "연결되지 않았습니다" 가 반복되면 `~/.academy/config.json` 이 없거나 손상된 것입니다. `TROUBLESHOOTING.md` 를 봅니다.
 
@@ -324,6 +321,6 @@ cp -r skills/* ~/.claude/skills/
 
 그다음 "오늘 뭐 해야 해?", "위험한 학생 있어?", "데이터 점검해줘" 를 바로 써 볼 수 있습니다.
 
-알림톡·문자를 보내실 생각이면 "문자 발송 세팅해줘" 로 발송 계정을 한 번 연결합니다. **이 단계는 설치가 아니라 선택입니다 — 문자를 보내지 않으실 거면 이 단계는 건너뛰셔도 되고, 나머지 스킬은 그대로 동작합니다.**
+알림톡은 스킬이 보내지 않습니다. 템플릿에 연결한 Make 가 보냅니다 — 출결 알림은 기록되는 순간, 리포트·납부 알림은 정해진 시간에 나갑니다. 문구를 고치고 싶으시면 "출결 알림 문구 바꿔줘" 처럼 `academy-template` 을 부르십시오.
 
 막히는 곳이 있으면 `TROUBLESHOOTING.md` 의 「설치할 때」 절을 먼저 봅니다.

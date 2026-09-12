@@ -19,7 +19,7 @@ GATE_STEPS = [
 GATE_CHECK_PATTERNS = [
     r"\(가\).*수업일",
     r"\(나\).*중복",
-    r"\(다\).*직전 과제",
+    r"\(다\).*평가 대상",
     r"\(라\).*퇴원",
 ]
 
@@ -36,7 +36,7 @@ ROUTING_COMBOS = [
     "출결 + 진도·과제",
     "출결 + 시험 점수",
     "신규 등록 + 수강료",
-    "상담 + 문자",
+    "상담 + 총평",
 ]
 
 NAME_PATHS = [
@@ -147,30 +147,22 @@ def test_db_map_lists_write_blocked_properties_per_database():
     databases = [
         "학생", "학생 과목별 페이지", "클래스", "출석부", "과제", "시험",
         "시험 카테고리", "수강료 납부", "납부 월", "재원생 상담", "신입생",
-        "학교", "클래스 공지사항", "문자 양식", "과제 M",
+        "학교", "클래스 공지사항", "문자 양식",
     ]
     missing = [d for d in databases if f"| {d} |" not in section]
     assert not missing, f"「DB별 쓰기 불가 속성」 표에 빠진 DB: {missing}"
     # 실측(schema-map.md)에서 확인된 대표 항목이 실제로 실려 있는지.
-    for prop in ["성적(%)", "평균", "미납 알림", "저번 과제", "평가 점수", "인원 수", "재원생 등록"]:
+    for prop in ["성적(%)", "평균", "미납 알림", "평가 점수", "인원 수", "재원생 등록", "출석문자", "양식(출결알림)"]:
         assert prop in section, f"「DB별 쓰기 불가 속성」 표에 {prop} 이 없다"
 
 
-def test_db_map_fingerprint_excludes_optional_claude_message_property():
-    """`클로드 문자` 는 최초 스캔 이후 추가된 속성이라 지문표에 들어가면 안 된다.
-
-    지문표에 있으면 구버전 복제본에서 12개 스킬 전부가 연결 단계에서 멈춘다.
-    """
+def test_db_map_write_blocked_table_names_current_buttons():
     text = (CORE_REFS / "db-map.md").read_text(encoding="utf-8")
-    fingerprint = text.split("## 스키마 지문표", 1)[1].split("## ", 1)[0]
-    assert "클로드 문자" not in fingerprint, (
-        "db-map.md 지문표에 `클로드 문자` 가 남아 있다 — 구버전 사본이 전부 멈춘다"
-    )
-    message_md = SKILLS / "academy-message" / "SKILL.md"
-    if message_md.exists():
-        assert "클로드 문자" in message_md.read_text(encoding="utf-8"), (
-            "academy-message 가 `클로드 문자` 확인을 자기 시작 시점으로 가져가지 않았다"
-        )
+    section = text.split("## DB별 쓰기 불가 속성", 1)[1].split("\n## ", 1)[0]
+    row = next(l for l in section.splitlines() if l.startswith("| 학생 과목별 페이지 |"))
+    for button in ["`출석`", "`지각`", "`미출석`"]:
+        assert button in row, f"학생 과목별 페이지 버튼 {button} 이 쓰기 불가 표에 없다"
+    assert "문자 전송" not in row, "없어진 `문자 전송` 버튼이 쓰기 불가 표에 남아 있다"
 
 
 def test_query_limits_documents_status_comparison():
@@ -324,23 +316,12 @@ def test_write_skill_points_at_core_undo_split(skill):
     )
 
 
-def test_write_safety_allows_send_with_approval():
+def test_write_safety_states_skills_never_send():
     text = (CORE_REFS / "write-safety.md").read_text(encoding="utf-8")
-    assert "알림톡·문자 발송" in text, "write-safety.md 에 발송 경계 행이 없다"
-    send_row = [ln for ln in text.splitlines() if "알림톡·문자 발송" in ln][0]
-    assert "금지" not in send_row, (
-        "발송이 아직 금지로 적혀 있다 — academy-send 가 생겼으므로 승인 경계로 바뀌어야 한다"
-    )
-    assert "승인" in send_row, "발송 경계에 승인 조건이 없다"
-
-
-def test_message_link_tokens_are_composable_with_domain():
-    text = (SKILLS / "academy-message" / "SKILL.md").read_text(encoding="utf-8")
-    assert "구조적으로 채울 수 없다" not in text, (
-        "링크를 구조적으로 불가능하다고 단정한 서술이 남아 있다 — 우피 도메인이 있으면 조립된다"
-    )
-    assert "oopy_domain" in text, (
-        "academy-message 가 send.oopy_domain 을 언급하지 않는다"
+    row = next((l for l in text.splitlines() if l.startswith("| 알림톡·문자 발송 |")), "")
+    assert row, "write-safety.md 에 발송 경계 행이 없다"
+    assert "하지 않는다" in row, (
+        "write-safety.md 발송 경계가 「어떤 스킬도 하지 않는다」로 바뀌지 않았다"
     )
 
 

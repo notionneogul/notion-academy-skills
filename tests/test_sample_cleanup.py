@@ -1,7 +1,7 @@
 """샘플 데이터 정리 절차가 `academy-setup` 안에 온전히 있는지 본다.
 
 구매자가 첫날 가장 먼저 부딪히는 절차라, 순서 한 칸이 어긋나면 고아 행이 남고
-남기는 3종 하나가 빠지면 이후 스킬이 가리킬 곳을 잃는다. 낱말이 있는지가 아니라
+남기는 2종 하나가 빠지면 이후 스킬이 가리킬 곳을 잃는다. 낱말이 있는지가 아니라
 순서와 항목이 실제로 갖춰져 있는지를 검사한다.
 """
 
@@ -133,13 +133,12 @@ def test_move_order_is_leaf_to_root(cleanup_section):
 KEEP = {
     "문자 양식": "원장이 그대로 쓸 양식이라 남긴다",
     "납부 월": "연월이라 학원이 달라도 재사용된다",
-    "과제 M": "마스터 1행이라 앞으로 만들 과제가 전부 이것을 가리킨다",
 }
 
 
 @pytest.mark.parametrize("db", sorted(KEEP), ids=sorted(KEEP))
 def test_kept_databases_are_named_with_a_reason(db, cleanup_section):
-    """셋 중 하나라도 빠지면 그 DB 가 통째로 치워진다."""
+    """둘 중 하나라도 빠지면 그 DB 가 통째로 치워진다."""
     keep_section = _subsection(cleanup_section, "남기는 것")
     row = re.search(rf"^\|\s*`{re.escape(db)}`\s*\|([^\n]*)$", keep_section, re.M)
     assert row, f"「남기는 것」 표에 `{db}` 행이 없다 ({KEEP[db]})"
@@ -373,12 +372,12 @@ def test_move_loop_is_per_database_with_count_verification(cleanup_section):
 
 
 def test_move_loop_matches_database_names_exactly(cleanup_section):
-    """부분 일치로 풀면 남기기로 한 `과제 M` 이 `과제` 에 딸려간다."""
+    """부분 일치로 풀면 `학생` 이 `학생 과목별 페이지` 에, `시험` 이 `시험 카테고리` 에 딸려간다."""
     loop = _subsection(cleanup_section, "DB 하나를 옮기는 루프")
     assert "정확히 일치" in loop, "config 키와 정확히 일치로 찾는다는 지시가 없다"
     assert "접두" in loop, "접두·부분 일치로 풀지 않는다는 금지가 없다"
-    assert re.search(r"남기는 3종이 그 안에 없는지", loop), (
-        "이동 직전에 남기는 3종이 대상에 없는지 확인하는 절차가 없다"
+    assert re.search(r"남기는 2종이 그 안에 없는지", loop), (
+        "이동 직전에 남기는 2종이 대상에 없는지 확인하는 절차가 없다"
     )
 
 
@@ -586,3 +585,12 @@ def test_move_loop_reports_one_line_per_database(cleanup_section):
     assert re.search(r"^> 출석부 <N>행 →", cleanup_section, re.M), (
         "DB 한 줄 보고의 예시가 없다"
     )
+
+
+def test_setup_expects_fourteen_databases_without_master_table():
+    text = "\n".join(
+        p.read_text(encoding="utf-8") for p in (SKILLS / "academy-setup").rglob("*.md")
+    )
+    assert "과제 M" not in text, "academy-setup 에 없어진 `과제 M` 이 남아 있다"
+    assert "15개" not in text, "academy-setup 이 아직 데이터베이스 15개를 찾는다"
+    assert "14개" in text, "academy-setup 이 데이터베이스 14개를 찾는다고 적지 않는다"
