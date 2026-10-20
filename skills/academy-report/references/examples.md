@@ -149,8 +149,8 @@ PDF 원본은 `~/.academy/reports/2026-08/` 에도 남아 있습니다. 속성�
   담당        ◯◯◯ 선생님
   문의 번호   02-000-0000
 
-고치시려면 맥은 ~/.claude/skills/academy-report/references/form.html,
-윈도우는 C:\Users\<사용자이름>\.claude\skills\academy-report\references\form.html 을
+고치시려면 스킬을 넣은 폴더 안의 academy-report/references/form.html 을
+(클로드 코드는 ~/.claude/skills/ 아래, 코덱스는 ~/.agents/skills/ 아래에 있습니다)
 복사해 ~/.academy/report-form.html(윈도우 C:\Users\<사용자이름>\.academy\report-form.html)
 로 저장한 뒤, 메모장 등 텍스트 편집기로 열어 위 세 자리와 첫머리 :root 의
 --brand(학원 대표색)를 바꾸시면 됩니다. 브라우저로는 고칠 수 없고, 고친 뒤 확인용으로만 여십시오.

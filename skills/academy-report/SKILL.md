@@ -62,7 +62,7 @@ description: 학생 과목별 월말 리포트를 PDF 한 장으로 만들어 �
 
 맥은 `~/.academy/report-form.html`, 윈도우는 `C:\Users\<사용자이름>\.academy\report-form.html` 이 있으면 그것을, 없으면 `references/form.html` 을 쓴다.
 
-**기본 양식을 쓰는 경우 5단계 미리보기에 그 사실을 밝힌다.** 기본 양식에는 학원 이름이 `◯◯ 수학학원`, 담당이 `◯◯◯ 선생님`, 문의 번호가 `02-000-0000` 으로 들어 있다 — 밝히지 않으면 그 상태 그대로 학부모에게 나간다. 밝힐 때 고치는 방법도 함께 안내한다: **맥은 `~/.claude/skills/academy-report/references/form.html`, 윈도우는 `C:\Users\<사용자이름>\.claude\skills\academy-report\references\form.html`** 을 복사해 `~/.academy/report-form.html`(윈도우 `C:\Users\<사용자이름>\.academy\report-form.html`)로 저장하고, **메모장·텍스트 편집기로** 열어 파일 첫머리의 `:root` 변수와 학원 이름을 고치면 된다. 고친 결과는 브라우저로 열어 확인해도 되지만, **브라우저로는 고칠 수 없다.**
+**기본 양식을 쓰는 경우 5단계 미리보기에 그 사실을 밝힌다.** 기본 양식에는 학원 이름이 `◯◯ 수학학원`, 담당이 `◯◯◯ 선생님`, 문의 번호가 `02-000-0000` 으로 들어 있다 — 밝히지 않으면 그 상태 그대로 학부모에게 나간다. 밝힐 때 고치는 방법도 함께 안내한다: **스킬을 넣은 폴더 안의 `academy-report/references/form.html`**(클로드 코드는 맥 `~/.claude/skills/`·윈도우 `C:\Users\<사용자이름>\.claude\skills\`, 코덱스는 맥 `~/.agents/skills/`·윈도우 `C:\Users\<사용자이름>\.agents\skills\`) 을 복사해 `~/.academy/report-form.html`(윈도우 `C:\Users\<사용자이름>\.academy\report-form.html`)로 저장하고, **메모장·텍스트 편집기로** 열어 파일 첫머리의 `:root` 변수와 학원 이름을 고치면 된다. 고친 결과는 브라우저로 열어 확인해도 되지만, **브라우저로는 고칠 수 없다.**
 
 **양식은 형태 참조다.** 항목 구성·순서·말투를 읽고 각 자리에 그 학생의 데이터를 넣는다 — 토큰 하나에 값 하나를 대입하는 절차가 아니다. 양식에 없는 항목을 새로 만들어 끼워 넣지 않고, 양식에 있는 항목을 조용히 빼지도 않는다.
 

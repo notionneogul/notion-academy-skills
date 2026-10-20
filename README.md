@@ -17,8 +17,8 @@
 1. 다음 주소를 브라우저에서 엽니다: <https://github.com/notionneogul/notion-academy-skills>. 초록색 `Code` 버튼을 누르고 `Download ZIP` 을 선택합니다.
 2. 내려받은 ZIP 의 압축을 풉니다.
 3. 압축 푼 폴더 안의 **`skills` 폴더에 들어 있는 13개 폴더**를 스킬 위치로 끌어넣습니다.
-   - 맥: `~/.claude/skills`
-   - 윈도우: `C:\Users\<사용자이름>\.claude\skills`
+   - 클로드 코드 — 맥 `~/.claude/skills`, 윈도우 `C:\Users\<사용자이름>\.claude\skills`
+   - 코덱스 — 맥 `~/.agents/skills`, 윈도우 `C:\Users\<사용자이름>\.agents\skills`
 
 **`skills` 폴더를 통째로 넣으면 안 됩니다. 그 안의 13개를 넣어야 합니다.** 폴더 여는 법, 숨김 폴더 보는 법, 잘못 넣었을 때의 모습은 [INSTALL.md 3단계](INSTALL.md)에 그림과 함께 있습니다.
 
@@ -34,11 +34,20 @@ mkdir -p ~/.claude/skills
 cp -r skills/* ~/.claude/skills/
 ```
 
+코덱스를 쓰신다면 마지막 두 줄의 `.claude` 를 `.agents` 로 바꾸면 됩니다.
+
 </details>
 
 ### 2. 노션 커넥터를 연결합니다
 
 Claude Code 채팅창 왼쪽 아래 `+` → `커넥터` → **Notion** 을 고르고, 브라우저가 열리면 노션에 로그인해 **허용**을 누릅니다. 터미널이 편하시면 `claude mcp add --transport http --scope user notion https://mcp.notion.com/mcp` 한 줄이면 됩니다.
+
+코덱스라면 터미널에 두 줄입니다.
+
+```bash
+codex mcp add notion --url https://mcp.notion.com/mcp
+codex mcp login notion
+```
 
 **노션 API 키는 만들지 않으셔도 됩니다.** `my-integrations` 에서 키를 발급받는 방식은 개발자용이고, 여기서 쓰는 커넥터는 로그인해서 허용만 누르면 끝입니다.
 
@@ -110,7 +119,7 @@ Claude Code 에서 다음처럼 말합니다.
 
 ## 요구 사항
 
-- Claude Code ([설치 방법은 INSTALL.md 1단계](INSTALL.md))
+- Claude Code 또는 Codex ([설치 방법은 INSTALL.md 1단계](INSTALL.md), 코덱스는 [「코덱스로 쓰실 분」](INSTALL.md) 절)
 - Notion 커넥터 (노션 무료 요금제로도 됩니다. 별도의 API 키는 필요 없습니다)
 - 「학원 관리 PRO X」 개편판(2026-09) 템플릿. 개편 전 사본에서는 연결 단계에서 멈춥니다
 - 알림톡을 보내시려면 템플릿에 연결하는 Make 시나리오가 따로 필요합니다. 스킬은 발송 계정을 쓰지 않습니다
